@@ -1,90 +1,117 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
+
+const operators = ['+', '-', '/', 'X', '=', 'AC'];
+
+const CalcKeys = [
+  {id: 'clear', value: 'AC' },
+  {id: 'divider', value: '/' },
+  {id: 'multiply', value: 'X' },
+  {id: 'seven', value: 7 },
+  {id: 'eight', value: 8 },
+  {id: 'nine', value: 9 },
+  {id: 'subtract', value: '-' },
+  {id: 'four', value: 4 },
+  {id: 'five', value: 5 },
+  {id: 'six', value: 6 },
+  {id: 'add', value: '+' },
+  {id: 'one', value: 1 },
+  {id: 'two', value: 2 },
+  {id: 'three', value:3 },
+  {id: 'equal', value: '=' },
+  {id: 'zero', value: 0 },
+  {id: 'decimal', value: '.' }
+]
+
+const numbers = [0,1,2,3,4,5,6,7,8,9];
+
+const Display = ({input, output}) => {
+    return (
+      <div id='output'>
+       <span className='result'>{output}</span>
+       <span id='display' className='input'>{input}</span>
+    </div>
+    )
+}
+
+const Key = ({keyData : {id, value}, hundleInput}) => { 
+  return (  <button id={id} onClick={() => hundleInput(value)}>{value}</button>  )
+}
+
+const Keyboard = ({hundleInput}) => {
+     return (
+      <div className='keys'>
+ {CalcKeys.map((key) => (
+  <Key key={key.id} keyData={key} hundleInput={hundleInput} />
+ ))}
+</div>
+     )
+}
+
+
+
+
+
 function App() {
-  const [sum, setSum] = useState(0)
-  const [display, setDisplay] = useState('0')
 
-  const clearDisplay = () => {
-    setDisplay('0')
-  }
 
-  const appendNum = (num) => {
-     
-   if(display === '0'){
-      setDisplay(num)
-   }else {
-    setDisplay(display + num)
-   }
-   setDisplay(prev => prev.replace(/\.{2,}/, '.'))
+  const [input, setInput] = useState('0')
+  const [output, setOutput] = useState('')
+  const [calculator, setCalculator] = useState('')
 
-   if(/^\d{1,2}\.\d$/.test(display)) {
-   setDisplay(prev => prev.replace(/^\d{1,2}\.\d$/, '.'))
-   }
 
-   // ^\d{1,2}\.\d$
-
-    /*
-      setSum(prev => prev + num)
-      if(sum === '0' || sum === '.'){
-        /replace more than one 0 in the string  
-       // setSum(prev => prev.replace(/0+/gi, '0'))
-        replace more than one . in the string  
-        //setSum(prev => prev.replace(/\.{2,}/g, '.'))
-       // console.log(typeof sum)
-      }
-    */
-
-  }
-
-  const result = () => {
-    if(display.includes('0')) {
-      if(/0+/g.test(display)) {
-        setDisplay(prev => prev.replace(/0+/g, '0'))
-      }
+  const hundleInput = (value) => {
+    const number = numbers.find((num) => num === value);
+    const operator = operators.find((op) => op === value);
+    switch (value) {
+      case  '=':
+         hundleSubmit();
+      break
+      case  'AC':
+        hundleClear();
+      break  
+      case  number:
+        hundleDecimal();
+      break
+      case  '.':
+        hundleDot();
+      break
+      case  operator:
+        hundleNumber();
+      break
     }
- 
-   // conto .
-
-    setDisplay(prev => eval(prev))
-
-    
-
-   console.log(typeof display)
   }
+
+  const hundleSubmit = () => {
+
+  } 
+  const hundleClear = () => {
+    
+  } 
+  const  hundleDecimal = (value) => {
+    
+  } 
+  const hundleNumber = (value) => {
+    
+  } 
+  const hundleDot = (value) => {
+    
+  } 
+
+  useEffect(() => {
+    hundleInput()
+  }, [calculator])
 
 
   return (
-    <main>
-      <article id='cal-container'>
-        <input type='text' name="cal" id='display' value={display} disabled />
-        <div className='btns'>
-
-          <button id='clear' onClick={clearDisplay}>C</button>
-          
-          <button id='add' onClick={() => appendNum('+')}>+</button>
-          <button id='seven' onClick={() => appendNum('7')}>7</button>
-          <button id='eight' onClick={() => appendNum('8')}>8</button>
-          <button id='nine' onClick={() => appendNum('9')}>9</button>
-
-          <button id='multiply' onClick={() => appendNum('*')}>*</button>
-          <button id='four' onClick={() => appendNum('4')}>4</button>
-          <button id='five' onClick={() => appendNum('5')}>5</button>
-          <button id='six' onClick={() => appendNum('6')}>6</button>
-
-          <button id='subtract' onClick={() => appendNum('-')}>-</button>
-          <button id='one' onClick={() => appendNum('1')}>1</button>
-          <button id='two' onClick={() => appendNum('2')}>2</button>
-          <button id='three' onClick={() => appendNum('3')}>3</button>
-
-          <button id='divide' onClick={() => appendNum('/')}>/</button>
-          <button id='zero' onClick={() =>  appendNum('0')}>0</button>
-          <button id='equals'  onClick={result}>=</button>
-          <button id='decimal' onClick={() =>  appendNum('.')}>.</button>
-
-        </div>
-      </article>
-    </main>
+    <div className='container'>
+      <div className='calcultator'>
+      <h1>ola</h1>
+      <Display input={input} output={output}/>
+      <Keyboard hundleInput={hundleInput}/>
+      </div>
+    </div>
   )
 }
 
